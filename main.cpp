@@ -1,14 +1,12 @@
 #include <iostream>
 #include <string>
 #include "big_num.h"
-#include "big_num.cpp"
 #include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <cstdlib>
 
 #include "cmdline.h"
-#include "cmdline.cc"
 
 using namespace std;
 
