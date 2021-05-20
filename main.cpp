@@ -1,20 +1,29 @@
 #include <iostream>
-#include <string>
-#include "big_num.h"
 #include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <cstdlib>
-
+#include <string>
+#include "calculadora.h"
+#include "big_num.h"
 #include "cmdline.h"
 
+// En este header ponemos todas las declaraciones que no podemos agrupar
+// en ninguna clase
+//#include "utils.h" 
+
+
+
 using namespace std;
+
+enum codigo_error{ENTRADA,SALIDA};
+
+#define PRECISION_DEFAULT "20"
 
 static void opt_input(string const &);
 static void opt_output(string const &);
 static void opt_precision(string const &);
 static void opt_help(string const &);
-void calculadora();
 
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
@@ -107,98 +116,22 @@ static void opt_help(string const &arg){
 	exit(0);
 }
 
-void calculadora(istream *is, ostream *os){
-	string linea;
 
-	// aca se toman los numeros y se realizan las operaciones 
-	while (getline(*is,linea)) {
-		string numero1[linea.length()], numero2[linea.length()];
-		char data;				// 
-		char operacion;			// buscamos que operacion tiene la linea
-		bool valida = true;		// verificamos si es una linea valida
-		bool num = false;		// num = false (para primer numero) num = true (para seg numero)	
-		int i = 0;
-		istringstream iss(linea);// leo la linea como "istringstream" para solo tener 
-		while(iss){
-			if(iss >> data){
-				// hasta aca lee las lineas individualmente sin espacio o tab 
-				//     -8675645    * + 876  --> -8675645*+876
-				// falta separar en numeros y operacion
-				// guardo siempre el primer valor a numero 1 (si es o no un signo)
-				if(i == 0 && num == false){
-					numero1[i] = data;
-					i++;
-				}else{
-					// Guardo primer numero
-					if(num == false){
-						// cuando data == * || + || - deja de ser numero 1
-						if(!isdigit(data)){
-							num = true;
-							numero1[i] = '\0';
-							i = 0;
-						}else{
-							// guardo en numero1
-							numero1[i] = data;
-							i++;
-						}
-					}
-					// Guardo la operacion y el segundo numero
-					if(num == true){
-						// aca esta el operando en el primer caracter
-						if(i == 0) operacion = data;
-						// guardo en numero2
-						// lo deberia guardar siempre
-						// de ahi en adelante guardo hasta final de la linea
-						else{
-							// todos los demas numeros
-							if(!isdigit(data)){
-								numero2[i-1] = '\0';
-								i = 0;
-							}else{
-								// guardo en numero2
-								numero2[i-1] = data;
-							}							
-						}
-						i++;
-					}
-				}
-			}
-		}
-		// Aca se 
-		cout << endl << "Fin de linea" << endl;
-		// Contamos el numero de signos y si existe algun caracter no valido.
-		
-	}
-	// Manejo de errores.
-	if (os->bad()) {
-		cerr << "cannot write to output stream."
-		     << endl;
-		exit(1);
-	}
-	if (is->bad()) {
-		cerr << "cannot read from input stream."
-		     << endl;
-		exit(1);
-	}
-	if (!is->eof()) {
-		cerr << "cannot find EOF on input stream."
-		     << endl;
-		exit(1);
-	}
-}
-	
+int main(int argc,char *const argv[])
+{  
+    string linea;
+    cmdline comandos(options);
+    comandos.parse(argc, argv);
 
-int main(int argc, char *argv[]){
-
-	cmdline cmdl(options);
-	cmdl.parse(argc, argv);
-	calculadora(iss, oss);
-    string numero = "56";
-    string numero2 = "-511";
-    BigNum num(numero,90); 
-    BigNum num2(numero2,90); 
-    //BigNum* resultado = num.suma(&num2);
-    BigNum* resultado = num.multiplicacion(&num2);
-    cout << *resultado;
+    while(getline(*iss, linea))
+    {
+        calculadora cuenta(linea);
+        *oss<<cuenta.resolver();
+        if( oss->bad()) 
+            exit(1);
+        if(iss->bad())
+            exit(1);
+    }
     return 0;
+
 }

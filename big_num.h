@@ -7,6 +7,10 @@ using namespace std;
 
 class BigNum{
     public:
+        //Constructor por defecto
+        BigNum();
+        //Contructor por copia
+        BigNum(const BigNum &);
         // Constructor "la construccion de la clase necesita un string y la precision"
         BigNum(string number, int p);
         // Metodo Suma

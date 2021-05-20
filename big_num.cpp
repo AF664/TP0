@@ -3,6 +3,19 @@
 #include "big_num.h"
 using namespace std;
 
+
+//Constructor por defecto
+BigNum::BigNum()
+{
+
+}
+
+//Constructor por copia
+BigNum::BigNum(const BigNum &num)
+{
+
+}
+
 /* Constructor de la clase BigNum
     Este metodo tiene como entrada un string 'number' que contiene el numero Ej:-76543
     y devuelve una clase BigNum que contiene la informacion de 'number' en sus atributos.
@@ -81,8 +94,8 @@ BigNum* BigNum::suma(BigNum* number){
     }
     
     cout << "Sumo: " << resultado[largo] << endl;
-    n_largo = nullptr;
-    n_corto = nullptr; 
+    n_largo = NULL;
+    n_corto = NULL; 
     return resultado_b;
 }
 
@@ -148,9 +161,9 @@ BigNum::~BigNum(){
 //                      Sobrecarga de operadores
 //
 // Sobrecarga del operador +
-BigNum operator + (const BigNum &p1, const BigNum &p2){
-    BigNum* resultado;
-    return *resultado;
+BigNum operator + (const BigNum &p1, const BigNum &p2)
+{
+    return p1;
 }
 
 
