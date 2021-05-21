@@ -3,6 +3,9 @@
 
 #include <string>
 #include <iostream>
+
+#define DEFAULT_PRECISION 20
+
 using namespace std;
 
 class BigNum{

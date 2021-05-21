@@ -1,4 +1,4 @@
-CXXARGS  = -g -Wall -ansi
+CXXARGS  = -g -Wall -ansi -std=c++17
 CXXFLAGS = -I. $(CXXARGS)
 
 all: main
@@ -20,4 +20,4 @@ big_num.o: big_num.cpp big_num.h
 	$(CXX) $(CXXFLAGS) -c big_num.cpp
 
 clean:
-	$(RM) -vf *.o *.t *.out *.err
+	$(RM) -vf *.o *.t *.out *.err main

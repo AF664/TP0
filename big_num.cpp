@@ -1,13 +1,20 @@
-#include <string>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <cstdlib>
+#include <string>
 #include "big_num.h"
+
 using namespace std;
 
 
 //Constructor por defecto
 BigNum::BigNum()
 {
-
+    precision = DEFAULT_PRECISION;
+    digits = NULL;
+    signo = 0;
 }
 
 //Constructor por copia
@@ -26,7 +33,8 @@ BigNum::BigNum(const BigNum &num)
 
         guardo los digitos al revez. ()
 */
-BigNum::BigNum(string numero, int p){
+BigNum::BigNum(string numero, int p)
+{
     int indice = 0, largo_s = numero.size();
     precision = p;
     longitud = largo_s;
@@ -41,7 +49,16 @@ BigNum::BigNum(string numero, int p){
         largo_s--;
     }
     for(int i = largo_s - 1;i >= 0; i--){
-        digits[largo_s -1 - i] = numero[i + signo] - '0';
+        try
+        {
+            digits[largo_s - 1 - i] = stoi(&numero[i + signo], NULL, 10);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr <<"Conversion error"<< e.what() << '\n';
+        }
+        
+       // digits[largo_s -1 - i] = numero[i + signo] - '0';
     }
     
 }
@@ -144,17 +161,24 @@ BigNum* BigNum::multiplicacion(BigNum* number){
     return n_resultado;
 }
 
-void BigNum::mostrar(){
-    cout << "El número almacenado tiene signo " << signo << " y es el: ";
-    for (int i = 0; i < longitud; i++) {
-        cout << digits[longitud - 1 - i];
+void BigNum::mostrar()
+{
+    if(digits)
+    {
+        cout << "El número almacenado tiene signo " << signo << " y es el: ";
+        for (int i = 0; i < longitud; i++) {
+            cout << digits[longitud - 1 - i];
+        }
+        cout << endl;
     }
-    cout << endl;
+    else
+        cout<<"NAN"<<endl;
 }
 
-BigNum::~BigNum(){
-    cout<<"Ejecutando destructor de clase BigNum para el objeto: "<< this <<endl;
-    delete digits;
+BigNum::~BigNum()
+{
+    if(digits)
+        delete [] digits;
 } 
 
 // --------------------------------------------------------------
@@ -179,7 +203,12 @@ BigNum operator * (const BigNum &p1, const BigNum &p2){
 
 ostream& operator << (ostream& os, const BigNum &dt)
 {
-    os << "El número almacenado tiene signo " << dt.signo << " y es el: ";
+    if(dt.digits == NULL)
+    {
+        os<<"NAN"<<endl;
+        return os;
+    }
+    os<<"El número almacenado tiene signo "<<dt.signo<<" y es el: ";
     int imprimir = min(dt.precision, dt.longitud);
     for (int i = 0; i < imprimir; i++) {
         os << dt.digits[imprimir - 1 - i];

@@ -10,15 +10,11 @@
 
 // En este header ponemos todas las declaraciones que no podemos agrupar
 // en ninguna clase
-//#include "utils.h" 
-
-
+#include "utils.h" 
 
 using namespace std;
 
 enum codigo_error{ENTRADA,SALIDA};
-
-#define PRECISION_DEFAULT "20"
 
 static void opt_input(string const &);
 static void opt_output(string const &);
@@ -125,12 +121,16 @@ int main(int argc,char *const argv[])
 
     while(getline(*iss, linea))
     {
+        cout<<"1"<<endl;
         calculadora cuenta(linea);
+        cout<<"2"<<endl;
         *oss<<cuenta.resolver();
-        if( oss->bad()) 
+        cout<<"3"<<endl;
+        if(oss->bad()) 
             exit(1);
         if(iss->bad())
             exit(1);
+        cout<<"4"<<endl;
     }
     return 0;
 

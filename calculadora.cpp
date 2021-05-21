@@ -36,6 +36,5 @@ calculadora::~calculadora()
 //Función que resuelve la operación dentro del objeto de tipo calculadora
 BigNum calculadora::resolver()
 {
-    BigNum p;
-    return p;
+    return operando1 + operando2;
 }
