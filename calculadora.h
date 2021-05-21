@@ -14,15 +14,15 @@ class calculadora
         BigNum operando1;
         BigNum operando2;
         // puntero a función que devuelve BigNum
-        BigNum (*operacion)(const BigNum &op1, const BigNum &op2);
+        char operacion;
     public:
         calculadora();
         calculadora(const calculadora &);
-        calculadora(string const &);
-        calculadora(const BigNum &, const BigNum &, BigNum (*op)(const BigNum &, const BigNum &));
+        calculadora(const string &, const int &);
+        calculadora(const BigNum &, const BigNum &, const char &);
         ~calculadora();
         BigNum resolver();
-
+        void setOperacion(const char &);
 };
 
 #endif

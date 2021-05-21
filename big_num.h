@@ -16,6 +16,8 @@ class BigNum{
         BigNum(const BigNum &);
         // Constructor "la construccion de la clase necesita un string y la precision"
         BigNum(string number, int p);
+        //Destructor
+        ~BigNum();    
         // Metodo Suma
         BigNum* suma(BigNum* number);
         //friend BigNum operator+(BigNum b1, const BigNum &b2); // para usar "+" entre bigNum
@@ -27,11 +29,12 @@ class BigNum{
         void mostrar(); 
         // sobrecarga de operadores
         friend ostream& operator << (ostream& os, const BigNum &num);
-        friend BigNum operator + (const BigNum &p1, const BigNum &p2);
+        friend BigNum operator + (const BigNum &, const BigNum &);
         friend BigNum operator - (const BigNum &p1, const BigNum &p2);
         friend BigNum operator * (const BigNum &p1, const BigNum &p2);
-        ~BigNum();     
-    private:
+        //Copia dos bignum
+        void copiarBigNum(const BigNum &);
+        private:
         // Defino variables caracteristicas de los numeros
         unsigned short int* digits;  // vector que contiene los numeros 
         int signo;                  // signo del numero que pasaron en la cadena

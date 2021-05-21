@@ -122,7 +122,7 @@ int main(int argc,char *const argv[])
     while(getline(*iss, linea))
     {
         cout<<"1"<<endl;
-        calculadora cuenta(linea);
+        calculadora cuenta(linea, 20);
         cout<<"2"<<endl;
         *oss<<cuenta.resolver();
         cout<<"3"<<endl;

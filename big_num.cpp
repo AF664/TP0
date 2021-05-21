@@ -18,9 +18,9 @@ BigNum::BigNum()
 }
 
 //Constructor por copia
-BigNum::BigNum(const BigNum &num)
+BigNum::BigNum(const BigNum &orig)
 {
-
+    copiarBigNum(orig);
 }
 
 /* Constructor de la clase BigNum
@@ -35,7 +35,7 @@ BigNum::BigNum(const BigNum &num)
 */
 BigNum::BigNum(string numero, int p)
 {
-    int indice = 0, largo_s = numero.size();
+    int indice = 0, largo_s = numero.length();
     precision = p;
     longitud = largo_s;
     signo = 0;
@@ -48,7 +48,7 @@ BigNum::BigNum(string numero, int p)
         longitud--;
         largo_s--;
     }
-    for(int i = largo_s - 1;i >= 0; i--){
+    for(int i = largo_s - 1; i >= 0; i--){
         try
         {
             digits[largo_s - 1 - i] = stoi(&numero[i + signo], NULL, 10);
@@ -215,4 +215,22 @@ ostream& operator << (ostream& os, const BigNum &dt)
     }
     os << endl;
     return os;
+}
+
+void BigNum::copiarBigNum(const BigNum &orig)
+{
+    if(digits)
+        delete [] digits;
+    precision = orig.precision;
+    signo = orig.signo;
+    longitud = orig.longitud;
+    if(orig.digits)
+    {
+        int l = sizeof(orig.digits)/sizeof(unsigned short int);
+        digits = new unsigned short int[l];
+        for(int i = 0; i < l; i++)
+            digits[i] = orig.digits[i];
+    }
+    else
+        digits = NULL;
 }
