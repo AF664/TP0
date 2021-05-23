@@ -25,6 +25,19 @@ BigNum::BigNum(const BigNum &orig)
     cout<<"aqui"<<endl;
 }
 
+// constructor con vector de digitos. 
+BigNum::BigNum(const unsigned short int* vector, const int largo, int sign){
+    precision = DEFAULT_PRECISION;      
+    longitud = largo;
+    valid_num = true;
+    signo = sign;
+    digits = new unsigned short int [largo];
+
+    for(int i = 0;i < largo; i++){
+        digits[i] = vector[i];
+    }
+}
+
 /* Constructor de la clase BigNum
     Este metodo tiene como entrada un string 'number' que contiene el numero Ej:-76543
     y devuelve una clase BigNum que contiene la informacion de 'number' en sus atributos.
@@ -66,15 +79,14 @@ BigNum::BigNum(string numero, int p)
 }
 
 
-BigNum* BigNum::suma(BigNum* number){
+void BigNum::suma(const BigNum* number, BigNum* resul){
     int carry = 0;
     int largo = max(longitud, number->longitud);
     int corto = min(longitud, number->longitud);
     unsigned short int* resultado = new unsigned short int[largo + 1]; 
-    BigNum* resultado_b = new BigNum("0",90);
-    resultado_b->digits = resultado; 
-    resultado_b->longitud = largo;
     BigNum *n_largo, *n_corto;
+
+    // distingo por el largo de los numeros
     if(corto == longitud){
         n_largo = (BigNum*)number;
         n_corto = this; 
@@ -82,6 +94,8 @@ BigNum* BigNum::suma(BigNum* number){
         n_largo = this;
         n_corto = (BigNum*)number;        
     }   
+
+    // Sumo los primeros numeros hasta que termino el numero corto
     for(int i = 0; i< corto; i++){
         int parcial = 0;
         parcial = carry + n_largo->digits[i] + n_corto->digits[i];
@@ -91,9 +105,11 @@ BigNum* BigNum::suma(BigNum* number){
         }else{
             carry = 0;
         }
-        cout << "Sumo: "<< n_largo->digits[i] << " + carry + " << n_corto->digits[i] << " = " << parcial << " + carry= "<< carry*10 << endl;
+        //cout << "Sumo: "<< n_largo->digits[i] << " + carry + " << n_corto->digits[i] << " = " << parcial << " + carry= "<< carry*10 << endl;
         resultado[i] = parcial;
     }
+
+    // Sumo los numeros del numero largo con cero
     for(int k = corto;k < largo; k++){
         int parcial = 0;
         parcial = carry + n_largo->digits[k];
@@ -103,33 +119,37 @@ BigNum* BigNum::suma(BigNum* number){
         }else{
             carry = 0;
         }        
-        cout << "Sumo: "<< n_largo->digits[k] << " + 0 = "  << parcial << " + carry= "<< carry*10 << endl;
+        //cout << "Sumo: "<< n_largo->digits[k] << " + 0 = "  << parcial << " + carry= "<< carry*10 << endl;
         resultado[k] = parcial;
         
     }
+    // Sumo el ultimo carry
     if(carry){
         resultado[largo] = carry;
-        resultado_b->longitud++;
+        largo++;
     }
     
-    cout << "Sumo: " << resultado[largo] << endl;
+    //cout << "Sumo: " << resultado[largo] << endl;
     n_largo = NULL;
     n_corto = NULL; 
-    return resultado_b;
+    resul->digits = resultado;
+    resul->longitud = largo;
+    resul->signo = signo; 
+    resul->valid_num = true;
 }
 
 BigNum* BigNum::resta(BigNum* number){
     return number;
 }
 
-BigNum* BigNum::multiplicacion(BigNum* number){
-    int carry = 0;
+BigNum BigNum::multiplicacion(const BigNum* number){
     int arriba = max(longitud, number->longitud);
-    int abajo = min(longitud, number->longitud);  
-    unsigned short int* resultado = new unsigned short int[arriba + abajo + 1];
-    BigNum* n_resultado = new BigNum("0",90);
-    n_resultado->digits = resultado; 
-    n_resultado->longitud = arriba + abajo + 1;
+    int abajo = min(longitud, number->longitud);
+    int largo = arriba + abajo + 1;
+    unsigned short int* resultado = new unsigned short int[largo];
+    BigNum n_resultado(resultado, largo, 0);
+    n_resultado.digits = resultado; 
+    n_resultado.longitud = largo;
     BigNum *n_arriba, *n_abajo; 
     if(abajo == longitud){
         n_arriba = (BigNum*)number;
@@ -140,6 +160,8 @@ BigNum* BigNum::multiplicacion(BigNum* number){
     } 
     // aca comienza la multiplicacion
     for(int i = 0; i < abajo; i++){
+        int carry = 0;
+        unsigned short int* resultado_parcial = new unsigned short int[largo];
         for(int k = 0; k < arriba; k++){
             int parcial = n_abajo->digits[i] * n_arriba->digits[k];
             if(parcial >= 10){
@@ -148,17 +170,32 @@ BigNum* BigNum::multiplicacion(BigNum* number){
             }else{
                 carry = 0;
             }       
-            resultado[k] += parcial;
-            resultado[k+1] = carry;
-            cout << resultado[k];
-            //cout << n_abajo->digits[i] << " * " << n_arriba->digits[k] << " = " << n_abajo->digits[i] * n_arriba->digits[k] << endl;
+            // en resultado esta la multiplicacion del elemento i con todo el vector "arriba"
+            // la "i" indica el desplazamiento por la posicion del num de abajo.
+            resultado_parcial[k + i] += parcial;
+            if(resultado_parcial[k + i] >= 10){
+                resultado_parcial[k + i] -= 10;
+                carry++;
+            }
+            resultado_parcial[k + 1 + i] = carry;
+            //cout << n_abajo->digits[i] << " * " << n_arriba->digits[k] << " = " << resultado_parcial[k+i] << endl;
+            
         }
+        //cout << "--- ";
+        // Sumo el resultado obtenido previamente con el acumulado.
+        // necesito un vector que me acumule las sumas previas 
+        // necesito sumar el acumulado con resultado_parcial
+        BigNum resultado_parc(resultado_parcial, largo, 0);
+        resultado_parc.suma(&n_resultado, &n_resultado);        // esto esta bien?? le paso el mismo numero pero uno es const y el otro no y me deja
+        for(int j = 0; j < largo; j++){
+            cout << resultado_parcial[arriba + abajo - j];
+        }
+        cout << endl;
     }
-
-
+    cout << n_resultado;
     // asigno signo a resultado
-    if(n_arriba->signo == n_abajo->signo) n_resultado->signo = 0;
-    else n_resultado->signo = 1;
+    if(n_arriba->signo == n_abajo->signo) n_resultado.signo = 0;
+    else n_resultado.signo = 1;
     
     return n_resultado;
 }
