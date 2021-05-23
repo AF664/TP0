@@ -14,17 +14,19 @@ class BigNum{
         BigNum();
         //Contructor por copia
         BigNum(const BigNum &);
+        //Contructor por mediante vector de digitos
+        BigNum(const unsigned short int*, const int l, int sign); 
         // Constructor "la construccion de la clase necesita un string y la precision"
         BigNum(string number, int p);
         //Destructor
         ~BigNum();    
         // Metodo Suma
-        BigNum* suma(BigNum* number);
+        void suma(const BigNum* number, BigNum* rusultado);
         //friend BigNum operator+(BigNum b1, const BigNum &b2); // para usar "+" entre bigNum
         // Metodo resta
         BigNum* resta(BigNum* number);
         // Metodo multiplicacion
-        BigNum* multiplicacion(BigNum* number);
+        BigNum multiplicacion(const BigNum* number);
         // Metodo mostrar
         void mostrar(); 
         // sobrecarga de operadores
