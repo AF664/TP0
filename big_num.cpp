@@ -20,7 +20,9 @@ BigNum::BigNum()
 //Constructor por copia
 BigNum::BigNum(const BigNum &orig)
 {
-    copiarBigNum(orig);
+    this->digits = NULL;
+    (*this).copiarBigNum(orig);
+    cout<<"aqui"<<endl;
 }
 
 /* Constructor de la clase BigNum
@@ -226,7 +228,7 @@ void BigNum::copiarBigNum(const BigNum &orig)
     longitud = orig.longitud;
     if(orig.digits)
     {
-        int l = sizeof(orig.digits)/sizeof(unsigned short int);
+        int l = orig.longitud;
         digits = new unsigned short int[l];
         for(int i = 0; i < l; i++)
             digits[i] = orig.digits[i];
