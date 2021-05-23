@@ -7,8 +7,6 @@
 // en ninguna clase
 #include "utils.h" 
 
-
-
 using namespace std;
 
 /* En esta parte declaro las funciones que va usar la variable de configuracion
@@ -23,6 +21,8 @@ static void flujo_salida(string const &nombre_archivo);
 // se requiera (o null e imprime mensaje error estandar)
 static void imprimir_ayuda(string const &msj_adic);
 
+static void opt_precision(string const &precision);
+
 // Devuelve un mensaje de error de acuerdo al código de entrada, y retorna 
 // un valor distinto de cero al sistema operativo.
 void error(int codigo);
@@ -36,9 +36,9 @@ enum codigo_error{ENTRADA,SALIDA};
 option_t config[] = {
     {1, "i", "input","-", flujo_entrada, OPT_DEFAULT},
     {1, "o", "output","-", flujo_salida, OPT_DEFAULT},
-    {1, "p", "precision",PRECISION_DEFAULT, OPT_DEFAULT},
+    {1, "p", "precision",PRECISION_DEFAULT,opt_precision, OPT_DEFAULT},
     {0, "h", "help",nullptr,imprimir_ayuda, OPT_DEFAULT},
-    {0,}, // Fin de opciones
+    {0,},// Fin de opciones
 
 };
 
