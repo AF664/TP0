@@ -49,4 +49,4 @@ Faltaria:
     El informe.
     
  //Actualización 25 de mayo
- Agregué operadores =, ==, menor, mayor a BigNum y adapté contenido de suma, multiplicación y resta a los operadores correspondientes.
+ Agregué operadores =, ==, menor, mayor a BigNum y adapté contenido de suma, multiplicación y resta a los operadores correspondientes. Se eliminó las funciones suma, resta y multiplicación ya que no eran necesarios.
