@@ -4,19 +4,29 @@
 #include "bignum.h"
 #include <iostream>
 #include <string>
+
+
 class calculadora
 {
     private:
-        bignum operando1;
-        bignum operando2;
+        bignum _operando1;
+        bignum _operando2;
+        status_t _estado;
         // puntero a función que devuelve bignum
-        bignum (*operacion)(const bignum &op1, const bignum &op2);
+        bignum (*_operacion)(const bignum &op1, const bignum &op2);
+
     public:
-        calculadora();
-        calculadora(std::string const &s);
-        calculadora(const bignum &op1, const bignum &op2, bignum (*op)(const bignum &, const bignum &));
+        
+        calculadora(size_t precision);
+        ~calculadora();
+
+        void set_operacion(bignum (*f)(const bignum &op1, const bignum &op2));
+        status_t estado();
+        bool good();
+
         bignum resultado(const calculadora &);
 
+        calculadora &operator=(const string &linea);
 
 };
 
