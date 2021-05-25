@@ -20,13 +20,6 @@ class BigNum{
         BigNum(string number, int p);
         //Destructor
         ~BigNum();    
-        // Metodo Suma
-        void suma(const BigNum* number, BigNum* rusultado);
-        //friend BigNum operator+(BigNum b1, const BigNum &b2); // para usar "+" entre bigNum
-        // Metodo resta
-        BigNum* resta(BigNum* number);
-        // Metodo multiplicacion
-        BigNum multiplicacion(const BigNum* number);
         // Metodo mostrar
         void mostrar(); 
         // sobrecarga de operadores
