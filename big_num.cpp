@@ -302,8 +302,72 @@ BigNum operator + (const BigNum &p1, const BigNum &p2)
 
 
 // Sobrecarga del operador -
-BigNum operator - (const BigNum &p1, const BigNum &p2){
-    return p1;
+BigNum operator - (const BigNum &p1, const BigNum &p2)
+{
+    int carry = 0;
+    int largo = max(p1.longitud, p2.longitud);
+    int corto = min(p1.longitud, p2.longitud);
+    unsigned short int* resultado = new unsigned short int[largo]; 
+    BigNum n_largo, n_corto, resul;
+
+    // distingo por el tamaño de los numeros
+    if(p1 < p2)
+    {
+        n_largo.copiarBigNum(p2);
+        n_corto.copiarBigNum(p1);
+        resul.signo = 1;
+    }
+    else
+    {
+        n_largo.copiarBigNum(p1);
+        n_corto.copiarBigNum(p2);
+        resul.signo = 0;
+    }   
+
+    // Resto los primeros numeros hasta que termino el numero corto
+    for(int i = 0; i< corto; i++){
+        int parcial = 0;
+        parcial = n_largo.digits[i] - n_corto.digits[i] - carry;
+        if(parcial < 0)
+        {
+            parcial+=10;
+            carry = 1;
+        }
+        else
+        {
+            carry = 0;
+        }
+        //cout << "Sumo: "<< n_largo->digits[i] << " + carry + " << n_corto->digits[i] << " = " << parcial << " + carry= "<< carry*10 << endl;
+        resultado[i] = parcial;
+    }
+
+    // Resto los numeros del numero largo con cero
+    for(int k = corto;k < largo; k++){
+        int parcial = 0;
+        parcial = n_largo.digits[k] - carry;
+        if(parcial < 0)
+        {
+            parcial+=10;
+            carry = 1;
+        }
+        else
+        {
+            carry = 0;
+        }        
+        //cout << "Sumo: "<< n_largo->digits[k] << " + 0 = "  << parcial << " + carry= "<< carry*10 << endl;
+        resultado[k] = parcial;    
+    }
+    // Resto el ultimo carry
+    if(carry)
+        resultado[largo - 1] -= carry;
+    if(!resultado[largo - 1])
+        largo--;
+
+    //cout << "Sumo: " << resultado[largo] << endl;
+    resul.digits = resultado;
+    resul.longitud = largo; 
+    resul.valid_num = true;
+    return resul;
 }
 
 // Sobrecarga del operador *
@@ -367,6 +431,60 @@ BigNum operator * (const BigNum &p1, const BigNum &p2){
     else n_resultado.signo = 1;
     
     return n_resultado;
+}
+
+bool operator==(const BigNum &p1, const BigNum &p2)
+{
+    if(!p1.valid_num || !p2.valid_num)
+        return false;
+    if(p1.digits == NULL || p2.digits == NULL)
+        return false;
+    if(p1.longitud != p2.longitud || p1.signo != p2.signo)
+        return false;
+    for(int i = 0; i < p1.longitud; i++)
+    {
+        if(p1.digits[i] != p2.digits[i])
+            return false;
+    }
+    return true;
+}
+
+//Compara tamaño en valor absoluto
+bool operator<(const BigNum &p1, const BigNum &p2)
+{
+    if(!p1.valid_num || !p2.valid_num)
+        return false;
+    if(p1.digits == NULL || p2.digits == NULL)
+        return false;
+    if(p1.longitud < p2.longitud)
+        return true;
+    for(int i = 0; i < p1.longitud; i++)
+    {
+        if(p1.digits[i] > p2.digits[i])
+            return false;
+        if(p1.digits[i] < p2.digits[i])
+            return true;
+    }
+    return false;
+}
+
+//Compara tamaño en valor absoluto
+bool operator>(const BigNum &p1, const BigNum &p2)
+{
+    if(!p1.valid_num || !p2.valid_num)
+        return false;
+    if(p1.digits == NULL || p2.digits == NULL)
+        return false;
+    if(p1.longitud < p2.longitud)
+        return false;
+    for(int i = 0; i < p1.longitud; i++)
+    {
+        if(p1.digits[i] > p2.digits[i])
+            return true;
+        if(p1.digits[i] < p2.digits[i])
+            return false;
+    }
+    return false;
 }
 
 bool operator==(const BigNum &p1, const BigNum &p2)
