@@ -393,7 +393,7 @@ BigNum operator * (const BigNum &p1, const BigNum &p2){
     // aca comienza la multiplicacion
     for(int i = 0; i < abajo; i++){
         int carry = 0;
-        unsigned short int* resultado_parcial = new unsigned short int[largo];
+        unsigned short int resultado_parcial[largo]={0};
         for(int k = 0; k < arriba; k++){
             int parcial = n_abajo.digits[i] * n_arriba.digits[k];
             if(parcial >= 10){
