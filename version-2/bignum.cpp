@@ -202,12 +202,20 @@ bignum operator+(const bignum &sumando1 , const bignum &sumando2)
         
 }
 
+bignum operator-(const bignum &minuendo, const bignum &sustraendo)
+{
+    bignum resta(sustraendo);
+    resta._signo = (resta._signo == POSITIVO) ? NEGATIVO : POSITIVO;
+    return minuendo + resta;
+
+}
+
 #ifdef _TEST_BIGNUM
 int main()
 {
     bignum numero1(10);
     bignum numero2(10);
-    bignum suma;
+    bignum operacion;
     string linea;
 
     while( !cin.eof())
@@ -218,10 +226,19 @@ int main()
         cout << "Prueba suma: ingrese segundo valor"<< '\n';
         getline(cin,linea);
         numero2=linea;
-        suma = numero1 + numero2;
-        cout << numero1 << " + " << numero2 << " = " << suma << '\n';
-        cout << "estado: " << suma.estado() << '\n';
-        
+        operacion = numero1 + numero2;
+        cout << numero1 << " + " << numero2 << " = " << operacion << '\n';
+        cout << "estado: " << operacion.estado() << '\n';
+
+        cout << "Prueba resta: ingrese primer valor"<< '\n';
+        getline(cin,linea);
+        numero1=linea;
+        cout << "Prueba resta: ingrese segundo valor"<< '\n';
+        getline(cin,linea);
+        numero2=linea;
+        operacion = numero1 - numero2;
+        cout << numero1 << " - " << numero2 << " = " << operacion << '\n';
+        cout << "estado: " << operacion.estado() << '\n';
     }
     
     return 0;

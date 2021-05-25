@@ -59,7 +59,7 @@ class bignum
         bignum &operator=(const bignum &original);
         bignum &operator=(const string &linea) ;
         friend bignum operator+(const bignum &sumando1 , const bignum &sumando2);
-        //friend bignum operator-(const bignum &minuendo, const bignum &sustraendo);
+        friend bignum operator-(const bignum &minuendo, const bignum &sustraendo);
         //friend bignum operator*(const bignum &factor1, const bignum &factor2);
         friend std::ostream& operator<<(std::ostream& ,const bignum&);
         //friend std::istream& operator>>(std::istream& , const bignum&);
