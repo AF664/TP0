@@ -433,22 +433,6 @@ BigNum operator * (const BigNum &p1, const BigNum &p2){
     return n_resultado;
 }
 
-bool operator==(const BigNum &p1, const BigNum &p2)
-{
-    if(!p1.valid_num || !p2.valid_num)
-        return false;
-    if(p1.digits == NULL || p2.digits == NULL)
-        return false;
-    if(p1.longitud != p2.longitud || p1.signo != p2.signo)
-        return false;
-    for(int i = 0; i < p1.longitud; i++)
-    {
-        if(p1.digits[i] != p2.digits[i])
-            return false;
-    }
-    return true;
-}
-
 //Compara tamaño en valor absoluto
 bool operator<(const BigNum &p1, const BigNum &p2)
 {

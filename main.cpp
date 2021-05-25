@@ -10,9 +10,9 @@
 
 // los agrego para el debug
 
-#include "calculadora.cpp"
+/*#include "calculadora.cpp"
 #include "big_num.cpp"
-#include "cmdline.cpp"
+#include "cmdline.cpp"*/
 
 // En este header ponemos todas las declaraciones que no podemos agrupar
 // en ninguna clase
