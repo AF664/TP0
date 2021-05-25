@@ -47,3 +47,6 @@ Faltaria:
     Algoritmo de resta
     verificar problemas de memoria
     El informe.
+    
+ //Actualización 25 de mayo
+ Agregué operadores = y == a BigNum y adapté contenido de suma y multiplicación a los operadores correspondientes.
