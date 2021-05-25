@@ -34,6 +34,8 @@ class BigNum{
         friend BigNum operator + (const BigNum &, const BigNum &);
         friend BigNum operator - (const BigNum &p1, const BigNum &p2);
         friend BigNum operator * (const BigNum &p1, const BigNum &p2);
+        friend bool operator==(const BigNum &p1, const BigNum &p2);
+        BigNum & operator=(const BigNum &orig);
         //Copia dos bignum
         void copiarBigNum(const BigNum &);
         // devuelve el signo del numero

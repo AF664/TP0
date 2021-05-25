@@ -23,7 +23,6 @@ BigNum::BigNum(const BigNum &orig)
 {
     this->digits = NULL;
     (*this).copiarBigNum(orig);
-    cout<<"aqui"<<endl;
 }
 
 // constructor con vector de digitos. 
@@ -244,7 +243,61 @@ BigNum::~BigNum()
 // Sobrecarga del operador +
 BigNum operator + (const BigNum &p1, const BigNum &p2)
 {
-    return p1;
+    int carry = 0;
+    int largo = max(p1.longitud, p2.longitud);
+    int corto = min(p1.longitud, p2.longitud);
+    unsigned short int* resultado = new unsigned short int[largo + 1]; 
+    BigNum n_largo, n_corto, resul;
+
+    // distingo por el largo de los numeros
+    if(corto == p2.longitud){
+        n_largo.copiarBigNum(p1);
+        n_corto.copiarBigNum(p2);
+    }else{
+        n_largo.copiarBigNum(p2);
+        n_corto.copiarBigNum(p2);        
+    }   
+
+    // Sumo los primeros numeros hasta que termino el numero corto
+    for(int i = 0; i< corto; i++){
+        int parcial = 0;
+        parcial = carry + n_largo.digits[i] + n_corto.digits[i];
+        if(parcial >= 10){
+            parcial-=10;
+            carry = 1;
+        }else{
+            carry = 0;
+        }
+        //cout << "Sumo: "<< n_largo->digits[i] << " + carry + " << n_corto->digits[i] << " = " << parcial << " + carry= "<< carry*10 << endl;
+        resultado[i] = parcial;
+    }
+
+    // Sumo los numeros del numero largo con cero
+    for(int k = corto;k < largo; k++){
+        int parcial = 0;
+        parcial = carry + n_largo.digits[k];
+        if(parcial >= 10){
+            parcial-=10;
+            carry = 1;
+        }else{
+            carry = 0;
+        }        
+        //cout << "Sumo: "<< n_largo->digits[k] << " + 0 = "  << parcial << " + carry= "<< carry*10 << endl;
+        resultado[k] = parcial;
+        
+    }
+    // Sumo el ultimo carry
+    if(carry){
+        resultado[largo] = carry;
+        largo++;
+    }
+    
+    //cout << "Sumo: " << resultado[largo] << endl;
+    resul.digits = resultado;
+    resul.longitud = largo;
+    resul.signo = p1.signo; 
+    resul.valid_num = true;
+    return resul;
 }
 
 
@@ -255,7 +308,87 @@ BigNum operator - (const BigNum &p1, const BigNum &p2){
 
 // Sobrecarga del operador *
 BigNum operator * (const BigNum &p1, const BigNum &p2){
-    return p1;
+    int arriba = max(p1.longitud, p2.longitud);
+    int abajo = min(p1.longitud, p2.longitud);
+    int largo = arriba + abajo + 1;
+    unsigned short int* resultado = new unsigned short int[largo];
+    BigNum n_resultado(resultado, largo, 0);
+    n_resultado.digits = resultado; 
+    n_resultado.longitud = largo;
+    BigNum n_arriba, n_abajo; 
+
+    if(abajo == p1.longitud){
+        n_arriba.copiarBigNum(p2);
+        n_abajo.copiarBigNum(p1); 
+    }else{
+        n_arriba.copiarBigNum(p1);
+        n_abajo.copiarBigNum(p2);        
+    } 
+    // aca comienza la multiplicacion
+    for(int i = 0; i < abajo; i++){
+        int carry = 0;
+        unsigned short int* resultado_parcial = new unsigned short int[largo];
+        for(int k = 0; k < arriba; k++){
+            int parcial = n_abajo.digits[i] * n_arriba.digits[k];
+            if(parcial >= 10){
+                carry = parcial / 10;
+                parcial = parcial - (carry * 10);
+            }else{
+                carry = 0;
+            }       
+            // en resultado esta la multiplicacion del elemento i con todo el vector "arriba"
+            // la "i" indica el desplazamiento por la posicion del num de abajo.
+            resultado_parcial[k + i] += parcial;
+            if(resultado_parcial[k + i] >= 10){
+                resultado_parcial[k + i] -= 10;
+                carry++;
+            }
+            resultado_parcial[k + 1 + i] = carry;
+            //cout << n_abajo->digits[i] << " * " << n_arriba->digits[k] << " = " << resultado_parcial[k+i] << endl;
+            
+        }
+        //cout << "--- ";
+        // Sumo el resultado obtenido previamente con el acumulado.
+        // necesito un vector que me acumule las sumas previas 
+        // necesito sumar el acumulado con resultado_parcial
+        BigNum resultado_parc(resultado_parcial, largo, 0);
+        n_resultado = n_resultado + resultado_parc;
+        for(int j = 0; j < largo; j++){
+            cout << resultado_parcial[arriba + abajo - j];
+        }
+        cout << endl;
+    }
+    cout << n_resultado;
+    // asigno signo a resultado
+    if(n_arriba.signo == n_abajo.signo) 
+        n_resultado.signo = 0;
+    else n_resultado.signo = 1;
+    
+    return n_resultado;
+}
+
+bool operator==(const BigNum &p1, const BigNum &p2)
+{
+    if(!p1.valid_num || !p2.valid_num)
+        return false;
+    if(p1.digits == NULL || p2.digits == NULL)
+        return false;
+    if(p1.longitud != p2.longitud || p1.signo != p2.signo)
+        return false;
+    for(int i = 0; i < p1.longitud; i++)
+    {
+        if(p1.digits[i] != p2.digits[i])
+            return false;
+    }
+    return true;
+}
+
+BigNum & BigNum::operator=(const BigNum &orig)
+{
+    if((*this) == orig)
+        return *this;
+    (*this).copiarBigNum(orig);
+    return *this;
 }
 
 ostream& operator << (ostream& os, const BigNum &dt)
@@ -268,7 +401,7 @@ ostream& operator << (ostream& os, const BigNum &dt)
     os<<"El número almacenado tiene signo "<<dt.signo<<" y es el: ";
     int imprimir = min(dt.precision, dt.longitud);
     for (int i = 0; i < imprimir; i++) {
-        os << dt.digits[imprimir - 1 - i];
+        cout << dt.digits[imprimir - 1 - i];
     }
     os << endl;
     return os;
