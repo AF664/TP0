@@ -66,9 +66,9 @@ BigNum::BigNum(string numero, int p)
     // creo un vector con todos los valores en cero
     digits = new unsigned short int [largo_s];
     int k;
-    for(int i = largo_s + indice - 1; i >= indice; i--){
+    for(int i = largo_s - 1; i >= indice; i--){
         string cad1;
-        cad1 = numero[i] + '\0';     // tomo solo un digito del numero
+        cad1 = numero[i + indice] + '\0';     // tomo solo un digito del numero
 
         try
         {
