@@ -49,4 +49,4 @@ Faltaria:
     El informe.
     
  //Actualización 25 de mayo
- Agregué operadores = y == a BigNum y adapté contenido de suma y multiplicación a los operadores correspondientes, el operador * todavía no realiza bien el cálculo no sé por qué, sigo buscando el error.
+ Agregué operadores = y == a BigNum y adapté contenido de suma y multiplicación a los operadores correspondientes.
