@@ -23,15 +23,6 @@ typedef enum status{
  } signo_t;
 
 
-#define OPERACIONES "+-*"
-
-enum operaciones {
-    SUMA,
-    RESTA,
-    MULTIPLICACION
-};
-
-
 class bignum
 {
     private:
@@ -61,13 +52,8 @@ class bignum
         // de estado en ERROR_OVERFLOW. 
        bignum &_desplazamiento_izq(unsigned shift);
 
-        
         // Pone en cero al numero
         bignum &_cero();
-
-        // Multiplica al bignum por un entero
-        bignum &_multiplicacion_entero(int mult);
-
 
     public:
         bignum(unsigned precision);

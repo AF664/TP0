@@ -6,8 +6,6 @@
 
 #include "bignum.h"
 
-string DiccionarioOperaciones(OPERACIONES);
-string DiccionarioDigitos("0123456789");
 
 unsigned short *bignum::_crear_digitos(unsigned precision)
 {
