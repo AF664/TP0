@@ -312,6 +312,8 @@ BigNum operator * (const BigNum &p1, const BigNum &p2){
     int abajo = min(p1.longitud, p2.longitud);
     int largo = arriba + abajo + 1;
     unsigned short int* resultado = new unsigned short int[largo];
+    for(int i = 0; i<largo; i++)
+        resultado[i] = 0;
     BigNum n_resultado(resultado, largo, 0);
     n_resultado.digits = resultado; 
     n_resultado.longitud = largo;
