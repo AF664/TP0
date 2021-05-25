@@ -1,5 +1,5 @@
 CXXARGS  = -g -Wall -ansi -std=c++17
-CXXFLAGS = -I. $(CXXARGS)
+CXXFLAGS = -I. $(CXXARGS) -g
 
 all: main
 	

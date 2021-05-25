@@ -8,6 +8,12 @@
 #include "big_num.h"
 #include "cmdline.h"
 
+// los agrego para el debug
+
+#include "calculadora.cpp"
+#include "big_num.cpp"
+#include "cmdline.cpp"
+
 // En este header ponemos todas las declaraciones que no podemos agrupar
 // en ninguna clase
 #include "utils.h" 
@@ -29,7 +35,9 @@ static option_t options[] = {
 	{0, },
 };
 
-static int precision;
+#define DEFAULT_PRECISION 20
+
+static int precision = DEFAULT_PRECISION;
 static istream *iss = 0;
 static ostream *oss = 0;
 static fstream ifs;
@@ -121,16 +129,16 @@ int main(int argc,char *const argv[])
 
     while(getline(*iss, linea))
     {
-        cout<<"1"<<endl;
-        calculadora cuenta(linea, 20);
-        cout<<"2"<<endl;
+        cout<<"--  Defino calculadora  --"<<endl;
+        calculadora cuenta(linea, precision);
+        cout<<"--  Resolver  --"<<endl;
         *oss<<cuenta.resolver();
-        cout<<"3"<<endl;
+        cout<<"--   Fin del calculo   --"<<endl;
         if(oss->bad()) 
             exit(1);
         if(iss->bad())
             exit(1);
-        cout<<"4"<<endl;
+        cout<<"--  Fin de linea  --"<<endl;
     }
     return 0;
 

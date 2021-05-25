@@ -15,6 +15,7 @@ BigNum::BigNum()
     precision = DEFAULT_PRECISION;
     digits = NULL;
     signo = 0;
+    valid_num = false;              // indica que no es un numero util
 }
 
 //Constructor por copia
@@ -54,26 +55,33 @@ BigNum::BigNum(string numero, int p)
     precision = p;
     longitud = largo_s;
     signo = 0;
-    // creo un vector con todos los valores en cero
-    digits = new unsigned short int [largo_s];
+    valid_num = true;
+
     // Numero negativo tiene - al inicio del str.
-    if(numero[0] == '-'){
-        signo = 1;
+    if(numero[0] == '-' || numero[0] == '+'){
+        signo = numero[0] == '-' ? 1 : 0;
         indice++;
         longitud--;
         largo_s--;
     }
-    for(int i = largo_s - 1; i >= 0; i--){
+    // creo un vector con todos los valores en cero
+    digits = new unsigned short int [largo_s];
+    int k;
+    for(int i = largo_s + indice - 1; i >= indice; i--){
+        string cad1;
+        cad1 = numero[i] + '\0';     // tomo solo un digito del numero
+
         try
         {
-            digits[largo_s - 1 - i] = stoi(&numero[i + signo], NULL, 10);
+            digits[largo_s - 1 - i] = stoi(cad1, NULL, 10);
+            k = digits[largo_s - 1 - i];
         }
         catch(const std::exception& e)
         {
-            std::cerr <<"Conversion error"<< e.what() << '\n';
+            std::cerr <<"Conversion error "<< e.what() << '\n';
+            valid_num = false;
+            break;
         }
-        
-       // digits[largo_s -1 - i] = numero[i + signo] - '0';
     }
     
 }
@@ -200,6 +208,16 @@ BigNum BigNum::multiplicacion(const BigNum* number){
     return n_resultado;
 }
 
+int BigNum::get_sign(){
+    return signo;
+}
+
+bool BigNum::get_valid_num(){
+    return valid_num;
+}
+void BigNum::set_sign(int s){
+    signo = s;
+}
 void BigNum::mostrar()
 {
     if(digits)
@@ -242,9 +260,9 @@ BigNum operator * (const BigNum &p1, const BigNum &p2){
 
 ostream& operator << (ostream& os, const BigNum &dt)
 {
-    if(dt.digits == NULL)
+    if(dt.valid_num == false)
     {
-        os<<"NAN"<<endl;
+        os<<"-- No es un número --"<<endl;
         return os;
     }
     os<<"El número almacenado tiene signo "<<dt.signo<<" y es el: ";
@@ -263,6 +281,7 @@ void BigNum::copiarBigNum(const BigNum &orig)
     precision = orig.precision;
     signo = orig.signo;
     longitud = orig.longitud;
+    valid_num = orig.valid_num;
     if(orig.digits)
     {
         int l = orig.longitud;

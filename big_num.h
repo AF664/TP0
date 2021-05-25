@@ -36,13 +36,19 @@ class BigNum{
         friend BigNum operator * (const BigNum &p1, const BigNum &p2);
         //Copia dos bignum
         void copiarBigNum(const BigNum &);
+        // devuelve el signo del numero
+        int get_sign();
+        // devuelve valid_num
+        bool get_valid_num();
+        // cambio el valor del signo
+        void set_sign(int s);
         private:
         // Defino variables caracteristicas de los numeros
         unsigned short int* digits;  // vector que contiene los numeros 
         int signo;                  // signo del numero que pasaron en la cadena
         int longitud;               // cantidad de digitos que tiene el vector digits
         int precision;              // cantidad de digitos con la cual se imprimer las operaciones
-
+        bool valid_num;             // indica si el numero es valido, tiene una representacion en digits
 
 };
 
