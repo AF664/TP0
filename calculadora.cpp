@@ -79,7 +79,8 @@ BigNum calculadora::resolver()
     cout<<"--  Selecciono la operacion  --"<<endl;
     // para el caso que la operacion este mal formulada devulvo un BigNum vacio
     // por defecto
-    if(!operando1.get_valid_num() && !operando2.get_valid_num()) return BigNum();
+    bool a = operando1.get_valid_num() & operando2.get_valid_num();
+    if(!a)return BigNum();
     if(operacion == '+')
     {
         // para el caso de suma de 2 numeros con mismo signo
