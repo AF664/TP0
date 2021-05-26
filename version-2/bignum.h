@@ -47,6 +47,8 @@ class bignum
         // Pone en cero al numero
         bignum &_cero();
 
+        bignum &_cambiar_precision(size_t precision);
+
     public:
         bignum();
         bignum(unsigned precision);

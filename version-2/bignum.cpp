@@ -146,9 +146,11 @@ bignum &bignum::operator=(const string &linea)
 
 bignum &bignum::operator=(int numero)
 {
-   unsigned digitos= numeric_limits<int>::digits10;
-   unsigned i; // iteraor
+   unsigned digitos, i; // iteraor
+   int aux = numero;
 
+    for(digitos=1; aux/=10 ; numero++ )
+    ;
     if( digitos > _precision )
     {   
         _estado = ERROR_PRECISION;
@@ -294,6 +296,7 @@ bignum &bignum::_cero()
 bignum &bignum::_desplazamiento_izq(unsigned shift)
 {
     unsigned i,j;
+    
     if( shift >= _precision)
     {
         this->_cero();
@@ -316,13 +319,32 @@ bignum &bignum::operator+=(const bignum &sumando)
     *this = *this + sumando;
     return *this ;
 }
+bignum &bignum::_cambiar_precision(size_t precision)
+{
+    unsigned short *tmp;
+    size_t i;
+    if( precision < _largo )
+        _estado = ERROR_OVERFLOW;
+    else{
+        tmp = new unsigned short[precision];
+        for( i=0 ; i < _largo; i++)
+            tmp[i]=_digitos[i];
+        for( i=_largo ;i< precision; i++ )
+            tmp[i] =0;
+        delete [] _digitos;
+        _digitos = tmp;
+        _estado = OK;
+        _precision = precision;
+    }
+    return *this;
+}
 
 bignum &bignum::operator*=(int numero)
 {
     unsigned i;
     bignum acumulador(_precision);
-    bignum aux(_precision);
-
+    bignum aux(_precision );
+    
     if( numero < 0)
     {
         _signo = (_signo == POSITIVO)? NEGATIVO : POSITIVO;
@@ -334,8 +356,9 @@ bignum &bignum::operator*=(int numero)
         aux = _digitos[i] * numero;
         acumulador += aux._desplazamiento_izq(i);
     }
+    acumulador._actualizar_largo();
     *this = acumulador;
-    this->_actualizar_largo();
+   
 
     return *this;
 }
@@ -350,8 +373,8 @@ bignum operator*(const bignum &factor1, int mult)
 
 bignum operator*(const bignum &f1, const bignum &f2)
 {
-    bignum mult(f1._precision);
-    bignum aux(f1._precision);
+    bignum mult(f1._precision );
+    bignum aux(f1._precision );
 
     unsigned i; // iterador
 
