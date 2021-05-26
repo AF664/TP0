@@ -5,6 +5,13 @@
 #include <iostream>
 #include <string>
 
+typedef enum operacion {
+    SUMAR,
+    RESTAR,
+    MULTIPLICAR,
+    NO_OP
+} operacion_t;
+
 
 class calculadora
 {
@@ -12,21 +19,27 @@ class calculadora
         bignum _operando1;
         bignum _operando2;
         status_t _estado;
-        // puntero a función que devuelve bignum
-        bignum (*_operacion)(const bignum &op1, const bignum &op2);
+      
+        operacion_t _operacion;
+
+        void _actualizar_estado();
 
     public:
-        
-        calculadora(size_t precision);
+
+        calculadora();    
+        calculadora(bignum &op1, bignum &op2, unsigned precision);
+        calculadora(unsigned precision );
         ~calculadora();
 
-        void set_operacion(bignum (*f)(const bignum &op1, const bignum &op2));
+        void set_operacion(operacion_t op);
         status_t estado();
         bool good();
+        
 
-        bignum resultado(const calculadora &);
+        bignum resultado() const;
 
         calculadora &operator=(const string &linea);
+
 
 };
 

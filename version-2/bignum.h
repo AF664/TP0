@@ -56,6 +56,7 @@ class bignum
         bignum &_cero();
 
     public:
+        bignum();
         bignum(unsigned precision);
         bignum(const bignum &original);
         bignum(const string &linea, size_t precision);

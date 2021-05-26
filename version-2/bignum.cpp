@@ -23,6 +23,14 @@ void bignum::_actualizar_largo()
         ;
     ++_largo;
 }
+bignum::bignum()
+{
+    _digitos = NULL;
+    _precision = 0;
+    _largo = 0;
+    _signo = POSITIVO;
+    _estado = OK;
+}
 
 bignum::bignum(unsigned precision=0)
 {
@@ -332,9 +340,7 @@ bignum operator*(const bignum &f1, const bignum &f2)
     {
         aux = f1;
         aux*= f2._digitos[i];
-         cout << f1 << " * " << f2._digitos[i] << " = " << aux << '\n';
         aux._desplazamiento_izq(i);
-        cout << "mult desplazamiento aux: " << aux << '\n';
         mult += aux;
     }
     if( f1._signo == NEGATIVO)
