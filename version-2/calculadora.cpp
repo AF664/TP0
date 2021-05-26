@@ -26,10 +26,6 @@ calculadora::calculadora()
 calculadora::~calculadora()
 {}
 
-void calculadora::_actualizar_estado()
-{
-    _estado = (_operando1.good() == OK && _operando2.good() == OK) ? OK : NOK ;
-}
 
 void calculadora::set_operacion(operacion_t op)
 {
@@ -38,29 +34,31 @@ void calculadora::set_operacion(operacion_t op)
 
 status_t calculadora::estado()
 {
-    this->_actualizar_estado();
     return _estado;
 }
 
 bool calculadora::good()
 {
-    this->_actualizar_estado();
     return (_estado == OK ? true : false );
 }
 
-bignum calculadora::resultado() const
+bignum calculadora::resultado()
 {
-        
+    bignum res;    
     if( _operacion == SUMAR)
-        return _operando1 + _operando2;
+        res = _operando1 + _operando2;
     
     if( _operacion == RESTAR)
-        return _operando1 - _operando2;
+        res = _operando1 - _operando2;
     
     if( _operacion == MULTIPLICAR)
-        return _operando1 * _operando2;
+        res = _operando1 * _operando2;
 
-    return bignum(0);
+    this->_estado = res.estado();
+    if( !res.good())
+        error_msj(res.estado());
+
+    return res;
 }
 
 calculadora &calculadora::operator=(const string &linea)
@@ -80,10 +78,27 @@ calculadora &calculadora::operator=(const string &linea)
      for( i=0 ; i< NO_OP && sop.find(DiccionarioOperaciones[i]) == std::string::npos ; i++)
         ;
 
+    _estado = (_operando1.good() && _operando2.good()) ? OK : NOK;
     _operacion = ( i < NO_OP) ? ( operacion_t )i : NO_OP;
 
-    this->_actualizar_estado();
     return *this;
+
+}
+
+istream& operator>>(std::istream &is ,calculadora &entrada)
+{
+    string linea;
+    getline(is,linea );
+    if( !is.good())
+    {
+        entrada._estado=ERROR_ENTRADA;
+        error_msj(entrada.estado());
+        return is;
+    }
+    entrada = linea;
+    if( !entrada.good())
+        error_msj(entrada.estado());
+    return is;
 
 }
 
@@ -100,6 +115,7 @@ calculadora &calculadora::operator=(const string &linea)
          getline(cin,linea);
          operacion = linea;
          cout << operacion.resultado() << '\n';
+         cout << (int )operacion.estado() << '\n';
 
      }
 
