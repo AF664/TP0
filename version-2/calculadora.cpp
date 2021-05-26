@@ -19,7 +19,7 @@ calculadora::calculadora()
 {
     _operando1 = bignum(0);
     _operando2 = bignum(0);
-     _estado = OK ;
+    _estado = OK ;
     _operacion = NO_OP;
 }
 
