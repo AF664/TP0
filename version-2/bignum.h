@@ -6,16 +6,8 @@
 #include <cctype>
 #include <limits>
 #include "utils.h"
+#include "_error.h"
 using namespace std;
-
-typedef enum status{
-    OK,
-    NOK,
-    ERROR_DIGITOS,
-    ERROR_PRECISION,
-    ERROR_OVERFLOW
-
-} status_t;
 
  typedef enum signo{
      POSITIVO=0,

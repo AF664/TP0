@@ -2,6 +2,7 @@
 #define _CALCULADORA_H_INCLUDED_
 
 #include "bignum.h"
+#include "_error.h"
 #include <iostream>
 #include <string>
 
@@ -22,8 +23,6 @@ class calculadora
       
         operacion_t _operacion;
 
-        void _actualizar_estado();
-
     public:
 
         calculadora();    
@@ -36,10 +35,11 @@ class calculadora
         bool good();
         
 
-        bignum resultado() const;
+        bignum resultado();
 
         calculadora &operator=(const string &linea);
-
+    
+        friend std::istream& operator>>(std::istream& ,calculadora &entrada);
 
 };
 
