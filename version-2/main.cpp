@@ -1,72 +1,147 @@
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <cstdlib>
 #include <string>
 #include "calculadora.h"
 #include "cmdline.h"
+#include "_error.h"
+#include "utils.h"
 
 // En este header ponemos todas las declaraciones que no podemos agrupar
 // en ninguna clase
 #include "utils.h" 
 
-
-
 using namespace std;
 
-/* En esta parte declaro las funciones que va usar la variable de configuracion
-de acuerdo a la opcion de entrada.*/
+
 // Abre el flujo de entrada segun el nombre de archivo, o stdin por defecto
-static void flujo_entrada(string const &nombre_archivo);
+static void opt_input(string const &nombre_archivo);
 
 // Abre el flujo de salida segun el nombre de archivo, o stdout por defecto
-static void flujo_salida(string const &nombre_archivo);
+static void opt_output(string const &nombre_archivo);
 
-// Imprime mensaje de error, con mensaje adicional en msj_adic en caso que
-// se requiera (o null e imprime mensaje error estandar)
-static void imprimir_ayuda(string const &msj_adic);
+// Imprime mensaje de error en cerr
+static void imprimir_ayuda(string const &arg);
 
-// Devuelve un mensaje de error de acuerdo al código de entrada, y retorna 
-// un valor distinto de cero al sistema operativo.
-void error(int codigo);
-
-enum codigo_error{ENTRADA,SALIDA};
-
-#define PRECISION_DEFAULT "20"
-
+static void opt_precision(string const &precision);
 
 
 option_t config[] = {
-    {1, "i", "input","-", flujo_entrada, OPT_DEFAULT},
-    {1, "o", "output","-", flujo_salida, OPT_DEFAULT},
-    {1, "p", "precision",PRECISION_DEFAULT, OPT_DEFAULT},
+    {1, "i", "input","-", opt_input, OPT_DEFAULT},
+    {1, "o", "output","-", opt_output, OPT_DEFAULT},
+    {1, "p", "precision",PRECISION_DEFAULT,opt_precision, OPT_DEFAULT},
     {0, "h", "help",nullptr,imprimir_ayuda, OPT_DEFAULT},
-    {0,}, // Fin de opciones
+    {0,},// Fin de opciones
 
 };
 
 
 static int precision;
-static istream *iss = 0;
-static ostream *oss = 0;
+static istream *iss;
+static ostream *oss;
 static fstream ifs;
 static fstream ofs;
 
 int main(int argc,char *const argv[])
 {  
-    string linea;
     cmdline comandos(config);
     comandos.parse(argc, argv);
+    calculadora cuenta(precision);
 
     while( !(iss->eof()) )
     {
-        getline(*iss,linea);
-        calculadora cuenta(linea);
-        *oss<< resultado(cuenta);
-        if( oss->bad()) 
-            error(SALIDA);
-        if(iss->bad())
-            error(ENTRADA);
+        *iss >> cuenta;
+        *oss << cuenta.resultado() << '\n';
 
     }
     return 0;
+}
 
 
+void opt_input(string const &arg)
+{
+	// Si el nombre del archivos es "-", usaremos la entrada
+	// estándar. De lo contrario, abrimos un archivo en modo
+	// de lectura.
+	//
+	if (arg == "-") {
+		iss = &cin;
+	} else {
+		ifs.open(arg.c_str(), ios::in);
+		iss = &ifs;
+	}
+
+	// Verificamos que el stream este OK.
+	//
+	if (!iss->good()) {
+		cerr << "cannot open "
+		     << arg
+		     << "."
+		     << endl;
+		exit(1);
+	}
+}
+
+static void opt_output(string const &arg)
+{
+	// Si el nombre del archivos es "-", usaremos la salida
+	// estándar. De lo contrario, abrimos un archivo en modo
+	// de escritura.
+	//
+	if (arg == "-") {
+		oss = &cout;
+	} else {
+		ofs.open(arg.c_str(), ios::out);
+		oss = &ofs;
+	}
+
+	// Verificamos que el stream este OK.
+	//
+	if (!oss->good()) {
+		cerr << "cannot open "
+		     << arg
+		     << "."
+		     << endl;
+		exit(1);
+	}
+}
+
+static void opt_precision(string const &arg)
+{
+	istringstream iss(arg);
+	
+	// Intentamos extraer el factor de la línea de comandos.
+	// Para detectar argumentos que únicamente consistan de 
+	// números enteros, vamos a verificar que EOF llegue justo
+	// después de la lectura exitosa del escalar.
+	//
+	if (!(iss >> precision)
+	    || !iss.eof()) {
+		cerr << "non-integer factor: "
+		     << arg
+		     << "."
+		     << endl;
+		exit(1);
+	}
+
+	if (iss.bad()) {
+		cerr << "cannot read integer factor."
+		     << endl;
+		exit(1);
+	}
+}
+
+static void imprimir_ayuda(string const &arg)
+{
+    if(arg != "")
+        cerr    << "argumento: "
+                << arg
+                << " no reconocido"
+                << '\n';
+    
+    cerr    << MSJ_AYUDA
+            << '\n';
+    exit(1);
 }

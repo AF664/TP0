@@ -2,6 +2,10 @@
 
 #include "utils.h"
 
+
+
+using namespace std;
+
 size_t stringRightTrim(string &s)
 {
     size_t posicion= s.find_last_not_of("  \t\f\v\n\r");
@@ -50,5 +54,3 @@ size_t stringDigits(string &s)
 
     return s.length();
 }
-
-
