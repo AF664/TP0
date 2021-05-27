@@ -176,7 +176,7 @@ bignum &bignum::operator=(int numero)
    unsigned digitos, i; // iteraor
    int aux = numero;
 
-    for(digitos=1; aux/=10 ; numero++ )
+    for(digitos=1; aux/=10 ; digitos++ )
     ;
     if( digitos > _precision )
     {   
@@ -193,8 +193,8 @@ bignum &bignum::operator=(int numero)
     }
 
     for(i = 0 ; numero ; ++i ,  numero/= 10 )
-        _digitos[i] = numero % 10;
-    
+        _digitos[i] = numero % 10 ;
+
     this->set_estado(OK);
     this->_actualizar_largo();
     return *this;

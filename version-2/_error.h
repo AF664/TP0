@@ -10,7 +10,7 @@
 #define _MSJ_NOK "Se encontraron errores en el proceso\n"
 #define _MSJ_ERROR_DIGITOS "Error, entrada no reconocida\n"
 #define _MSJ_ERROR_PRECISION "Error, precision no adecuada\n"
-#define _MSJ_ERROR_OVERFLOW "Error, operación sobrepasó la precisión\n"
+#define _MSJ_ERROR_OVERFLOW "Error, operacion sobrepaso la precision\n"
 #define _MSJ_ERROR_ENTRADA "Error, no se pudo leer la entrada\n"
 
 
