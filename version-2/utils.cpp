@@ -39,6 +39,7 @@ size_t stringTrim(string &s)
 
 size_t stringDigits(string &s)
 {
+    
     // quito los espacios en blanco, si los hubiera, a izquierda
     // y derecha.
     stringTrim(s);
@@ -49,8 +50,11 @@ size_t stringDigits(string &s)
     
     // si hay algún caracter que no sea un digito, sin contar el signo
     // el número representado se considera mal conformado
-    if ( s.find_first_not_of("0123456789",1) < s.length() )
-        s.erase();
+   
+
+    if ( s.find_first_not_of(DIGITOS,1) < s.length() || 
+        s.find_last_of(DIGITOS) == string::npos)
+            s.erase();
 
     return s.length();
 }
