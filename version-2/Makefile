@@ -52,7 +52,7 @@ test-wrong: main
 
 test-valgrind-wrong: main
 	@set -e;
-	@echo Archivo de prueba: txns4, tiene mal el formato.;
+	@echo Archivo de prueba: entrada2, tiene mal el formato.;
 	@echo Probando si hubieron fugas de memoria..;
 	@valgrind --tool=memcheck ./main -i entrada2.txt -o entrada2.txt -p 1 2>/dev/null;
 	@echo Test ok.;
