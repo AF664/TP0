@@ -45,14 +45,14 @@ test-valgrind-fine: main
 
 test-wrong: main
 	@set -e;
-	@echo Archivo de prueba: entrada2, tiene mal el formato y precisión muy chica.;
+	@echo Archivo de prueba: entrada2, tiene mal el formato y precisión 1.;
 	-@./main -i entrada2.txt -o salida2.txt -p 1;
 	@echo Test ok.;
 	@echo -------------------------------------------------------------------------------;
 
 test-valgrind-wrong: main
 	@set -e;
-	@echo Archivo de prueba: entrada2, tiene mal el formato y precisión muy chica.;
+	@echo Archivo de prueba: entrada2, tiene mal el formato y precisión 1.;
 	@echo Probando si hubieron fugas de memoria..;
 	-@valgrind --tool=memcheck ./main -i entrada2.txt -o salida2.txt -p 1 2>/dev/null;
 	@echo Test ok.;
