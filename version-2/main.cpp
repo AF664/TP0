@@ -54,15 +54,20 @@ int main(int argc,char *const argv[])
     cmdline comandos(config);
     comandos.parse(argc, argv);
     calculadora cuenta(precision);
+	status_t estado_aplicacion = OK;
 
     while( (*iss >> cuenta) ) 
     {
         *oss << cuenta.resultado() << '\n';
 		if( !cuenta.good())
+		{
 			error_msj(cuenta.estado());
+			estado_aplicacion = NOK;
+		}
+
 		
     }
-    return 0;
+    return estado_aplicacion;
 }
 
 
