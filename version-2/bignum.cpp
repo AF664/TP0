@@ -28,6 +28,18 @@ void bignum::_actualizar_largo()
     else
         _largo = 0;
 }
+
+void bignum::set_estado(status_t nuevo)
+{
+   
+    if(nuevo != OK)
+    {
+        this->_poner_a_cero();
+        _largo=0;
+    }
+    _estado = nuevo;
+}
+
 bignum::bignum()
 {
     _digitos = NULL;
@@ -136,9 +148,11 @@ bignum &bignum::operator=(const string &linea)
         this->_poner_a_cero();
     
     else if(  --longitud > _precision )
-        _estado = ERROR_PRECISION;
+        this->set_estado(ERROR_PRECISION) ;
+        
+
     else {
-        _estado = OK; 
+        this->set_estado(OK); 
         _signo = ( aux[0] == '+')? POSITIVO : NEGATIVO;
         _largo = longitud  ;
         for(int i=longitud, j =0 ; i>0 ; --i , ++j)
@@ -166,7 +180,7 @@ bignum &bignum::operator=(int numero)
     ;
     if( digitos > _precision )
     {   
-        _estado = ERROR_PRECISION;
+        this->set_estado(ERROR_PRECISION);
         return *this;
     }
   
@@ -181,7 +195,7 @@ bignum &bignum::operator=(int numero)
     for(i = 0 ; numero ; ++i ,  numero/= 10 )
         _digitos[i] = numero % 10;
     
-    _estado = OK;
+    this->set_estado(OK);
     this->_actualizar_largo();
     return *this;
 
@@ -213,7 +227,8 @@ bignum &bignum::_suma_sin_signo(bignum const &s2 , int &carry)
     if( !this->good() || 
         !s2.good() || 
         (_precision != s2._precision) )
-            _estado = NOK;
+            this->set_estado(NOK);
+        
     else{
         carry=0;
         for( unsigned i = 0 , parcial = 0; i < _precision ; ++i)
@@ -226,8 +241,8 @@ bignum &bignum::_suma_sin_signo(bignum const &s2 , int &carry)
     }
 
     this->_actualizar_largo();
-  
     return *this;
+
 }
 
 bignum &bignum::_complemento_base_10()
@@ -256,11 +271,10 @@ bignum operator+(const bignum &sumando1 , const bignum &sumando2)
     int signo = s1._signo + s2._signo;
     if( !s1.good() || !s2.good())
     {
-        s1._poner_a_cero();
-        s1._estado = NOK;
+        s1.set_estado(NOK);
         return s1;
     }
-    
+
     if( s1._signo == NEGATIVO)
         s1._complemento_base_10();
     if( s2._signo == NEGATIVO)
@@ -270,7 +284,7 @@ bignum operator+(const bignum &sumando1 , const bignum &sumando2)
 
     signo -= carry ;
     if (signo < 0)
-        s1._estado = ERROR_OVERFLOW;
+        s1.set_estado(ERROR_OVERFLOW);
     else if ( signo == 1)
     {  
         s1._signo = NEGATIVO;
@@ -302,7 +316,7 @@ bignum &bignum::_poner_a_cero()
             _digitos[--_largo]=0;
         _largo = 1;
     }
-    _estado = OK;
+    this->set_estado(OK);
     _signo = POSITIVO;
     return *this;
 }
@@ -313,8 +327,7 @@ bignum &bignum::_desplazamiento_izq(unsigned shift)
     
     if( shift >= _precision)
     {
-        this->_poner_a_cero();
-        _estado = ERROR_OVERFLOW;
+        this->set_estado(ERROR_OVERFLOW);
         return *this;
     }
     for(i= _precision , j =_precision - shift ;  j > 0 ; )
@@ -323,7 +336,7 @@ bignum &bignum::_desplazamiento_izq(unsigned shift)
     while ( i > 0)
         _digitos[--i]=0;
    
-    _estado = (shift > (_precision - _largo))? ERROR_OVERFLOW : OK;
+    this->set_estado( (shift > (_precision - _largo))? ERROR_OVERFLOW : OK );
     this->_actualizar_largo();
     return *this; 
 
@@ -337,8 +350,9 @@ bignum &bignum::_cambiar_precision(size_t precision)
 {
     unsigned short *tmp;
     size_t i;
-    if( precision < _largo )
-        _estado = ERROR_OVERFLOW;
+    if( precision < _largo ) 
+        this->set_estado(ERROR_OVERFLOW);
+       
     else{
         tmp = new unsigned short[precision];
         for( i=0 ; i < _largo; i++)
@@ -347,7 +361,7 @@ bignum &bignum::_cambiar_precision(size_t precision)
             tmp[i] =0;
         delete [] _digitos;
         _digitos = tmp;
-        _estado = OK;
+        this->set_estado(OK);
         _precision = precision;
     }
     return *this;

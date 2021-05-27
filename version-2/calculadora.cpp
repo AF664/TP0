@@ -44,18 +44,24 @@ bool calculadora::good()
 
 bignum calculadora::resultado()
 {
-    bignum res;    
-    if( _operacion == SUMAR)
-        res = _operando1 + _operando2;
+    bignum res;
+    if(this->good() )    
+    {
+        if( _operacion == SUMAR)
+            res = _operando1 + _operando2;
     
-    if( _operacion == RESTAR)
-        res = _operando1 - _operando2;
+        else if( _operacion == RESTAR)
+            res = _operando1 - _operando2;
     
-    if( _operacion == MULTIPLICAR)
-        res = _operando1 * _operando2;
-
-    this->_estado = res.estado();
-
+        else  if( _operacion == MULTIPLICAR)
+            res = _operando1 * _operando2;
+        this->_estado = res.estado();
+    }
+    else
+    {
+        this->_estado = NOK;
+        res.set_estado(NOK);
+    }
     return res;
 }
 
@@ -96,15 +102,13 @@ istream& operator>>(std::istream &is ,calculadora &entrada)
 {
     string linea;
     getline(is,linea );
-    if( is.eof())
+    if( !is.good())
     {
         entrada._estado=ERROR_ENTRADA;
-        error_msj(entrada.estado());
         return is;
     }
     entrada = linea;
-    if( !entrada.good())
-        error_msj(entrada.estado());
+   
     return is;
 
 }

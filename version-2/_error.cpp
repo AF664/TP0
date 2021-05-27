@@ -15,5 +15,4 @@ const char *DiccionarioMsjError[_CNT_MSJ_ERROR]={
 void error_msj(status_t codigo)
 {
     cerr << DiccionarioMsjError[(unsigned)codigo];
-    exit(1);
 }

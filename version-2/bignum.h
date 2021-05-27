@@ -62,6 +62,7 @@ class bignum
         size_t largo() const;
         signo_t signo() const;
         status_t estado() const;
+        void set_estado(status_t nuevo);
         bool cero() const;
         bool good() const;
 

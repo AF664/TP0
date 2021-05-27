@@ -55,11 +55,12 @@ int main(int argc,char *const argv[])
     comandos.parse(argc, argv);
     calculadora cuenta(precision);
 
-    while( !(iss->eof()) )
+    while( (*iss >> cuenta) ) 
     {
-        *iss >> cuenta;
         *oss << cuenta.resultado() << '\n';
-
+		if( !cuenta.good())
+			error_msj(cuenta.estado());
+		
     }
     return 0;
 }
