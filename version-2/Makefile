@@ -38,7 +38,7 @@ test-valgrind-fine: main
 	@set -e;
 	@echo Archivos de prueba: entrada1 salida1 salida1ref con precisión 20.;
 	@echo Probando si hubieron fugas de memoria..;
-	@valgrind --tool=memcheck ./main -i entrada1.txt -o salida1.txt -p 20 2>/dev/null;
+	@valgrind --tool=memcheck ./main -i entrada1.txt -o salida1.txt -p 20;
 	@echo Test ok;
 	@echo -------------------------------------------------------------------------------;
 
@@ -47,15 +47,15 @@ test-wrong: main
 	@set -e;
 	@echo Archivo de prueba: entrada2, tiene mal el formato y precisión 1.;
 	-@./main -i entrada2.txt -o salida2.txt -p 1;
-	@echo Test ok.;
+	@echo Si error == 1 test ok.;
 	@echo -------------------------------------------------------------------------------;
 
 test-valgrind-wrong: main
 	@set -e;
 	@echo Archivo de prueba: entrada2, tiene mal el formato y precisión 1.;
 	@echo Probando si hubieron fugas de memoria..;
-	-@valgrind --tool=memcheck ./main -i entrada2.txt -o salida2.txt -p 1 2>/dev/null;
-	@echo Test ok.;
+	-@valgrind --tool=memcheck ./main -i entrada2.txt -o salida2.txt -p 1;
+	@echo Si error == 1 test ok.;
 	@echo -------------------------------------------------------------------------------;
 
 clean:
