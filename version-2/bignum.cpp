@@ -145,7 +145,10 @@ bignum &bignum::operator=(const string &linea)
     size_t longitud = stringDigits(aux);      
  
     if( !(longitud) )   
+    {
         this->_poner_a_cero();
+        this->set_estado(ERROR_DIGITOS);  // Corrección de problema con identificación de 
+    }                                     // números mal conformados.
     
     else if(  --longitud > _precision )
         this->set_estado(ERROR_PRECISION) ;
