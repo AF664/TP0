@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <string>
-#include <cctype>
 
+
+#define DIGITOS "0123456789"
 
 using namespace std;
 
@@ -23,5 +24,7 @@ size_t stringTrim(string &s);
 // stringBignum modifica al string s para que quede bien conformado
 // como cadena de caracteres representando un número entero
 size_t stringDigits(string &s);
+
+
 
 #endif

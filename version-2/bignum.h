@@ -45,7 +45,9 @@ class bignum
        bignum &_desplazamiento_izq(unsigned shift);
 
         // Pone en cero al numero
-        bignum &_cero();
+        bignum &_poner_a_cero();
+
+        bignum &_cambiar_precision(size_t precision);
 
     public:
         bignum();
@@ -60,6 +62,8 @@ class bignum
         size_t largo() const;
         signo_t signo() const;
         status_t estado() const;
+        void set_estado(status_t nuevo);
+        bool cero() const;
         bool good() const;
 
         bignum &operator=(const bignum &original);

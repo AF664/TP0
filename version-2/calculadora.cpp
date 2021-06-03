@@ -44,42 +44,55 @@ bool calculadora::good()
 
 bignum calculadora::resultado()
 {
-    bignum res;    
-    if( _operacion == SUMAR)
-        res = _operando1 + _operando2;
+    bignum res;
+    if(this->good() )    
+    {
+        if( _operacion == SUMAR)
+            res = _operando1 + _operando2;
     
-    if( _operacion == RESTAR)
-        res = _operando1 - _operando2;
+        else if( _operacion == RESTAR)
+            res = _operando1 - _operando2;
     
-    if( _operacion == MULTIPLICAR)
-        res = _operando1 * _operando2;
-
-    this->_estado = res.estado();
-    if( !res.good())
-        error_msj(res.estado());
-
+        else  if( _operacion == MULTIPLICAR)
+            res = _operando1 * _operando2;
+        this->_estado = res.estado();
+    }
+    else
+    {
+        this->_estado = NOK;
+        res.set_estado(NOK);
+    }
     return res;
 }
 
 calculadora &calculadora::operator=(const string &linea)
 {
     unsigned i; // iterador
-    size_t num1 = linea.find_first_of("0123456789");
-    size_t op = linea.find_first_of(DiccionarioOperaciones, num1);
+    
+    size_t num1 ;
+    size_t op ;
+    if( (num1= linea.find_first_of("0123456789")) == string::npos ||
+        (op=linea.find_first_of(DiccionarioOperaciones, num1)) == string::npos)
+    { 
+        _operacion = NO_OP;
+        _estado = NOK;
+    }
+    else{
 
-    string sbignum1 = linea.substr(0,op);
-    string sop = linea.substr(op,1);
-    string sbignum2 = linea.substr(op+1);
+        string sbignum1 = linea.substr(0,op);
+        string sop = linea.substr(op,1);
+        string sbignum2 = linea.substr(op+1);
 
-    _operando1 = sbignum1;
-    _operando2 = sbignum2;
+        _operando1 = sbignum1;
+        _operando2 = sbignum2;
 
 
-     for( i=0 ; i< NO_OP && sop.find(DiccionarioOperaciones[i]) == std::string::npos ; i++)
-        ;
+        for( i=0 ; i< NO_OP && sop.find(DiccionarioOperaciones[i]) == std::string::npos ; i++)
+            ;
 
-    _estado = (_operando1.good() && _operando2.good()) ? OK : NOK;
-    _operacion = ( i < NO_OP) ? ( operacion_t )i : NO_OP;
+        _estado = (_operando1.good() && _operando2.good()) ? OK : NOK;
+        _operacion = ( i < NO_OP) ? ( operacion_t )i : NO_OP;
+    }
 
     return *this;
 
@@ -92,12 +105,10 @@ istream& operator>>(std::istream &is ,calculadora &entrada)
     if( !is.good())
     {
         entrada._estado=ERROR_ENTRADA;
-        error_msj(entrada.estado());
         return is;
     }
     entrada = linea;
-    if( !entrada.good())
-        error_msj(entrada.estado());
+   
     return is;
 
 }

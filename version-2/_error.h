@@ -7,11 +7,11 @@
 
 #define _CNT_MSJ_ERROR 6
 #define _MSJ_OK ""
-#define _MSJ_NOK "\nNo se pudo realizar la tarea\n"
-#define _MSJ_ERROR_DIGITOS "\nError, entrada no reconocida\n"
-#define _MSJ_ERROR_PRECISION "\nError, precision no adecuada\n"
-#define _MSJ_ERROR_OVERFLOW "\nError, operación sobrepasó la precisión\n"
-#define _MSJ_ERROR_ENTRADA "\nError, no se pudo leer la entrada\n"
+#define _MSJ_NOK "Se encontraron errores en el proceso\n"
+#define _MSJ_ERROR_DIGITOS "Error, entrada no reconocida\n"
+#define _MSJ_ERROR_PRECISION "Error, precision no adecuada\n"
+#define _MSJ_ERROR_OVERFLOW "Error, operacion sobrepaso la precision\n"
+#define _MSJ_ERROR_ENTRADA "Error, no se pudo leer la entrada\n"
 
 
 typedef enum status{

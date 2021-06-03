@@ -7,6 +7,7 @@
 #define OPT_DEFAULT   0
 #define OPT_SEEN      1
 #define OPT_MANDATORY 2
+#define PRECISION_DEFAULT "20"
 
 struct option_t {
 	int has_arg;
@@ -19,7 +20,7 @@ struct option_t {
 
 class cmdline {
 	// Este atributo apunta a la tabla que describe todas
-	// las opciones a procesar. Por el momento, sólo puede
+	// las opciones a procesar. Por el momento, sï¿½lo puede
 	// ser modificado mediante contructor, y debe finalizar
 	// con un elemento nulo.
 	//
